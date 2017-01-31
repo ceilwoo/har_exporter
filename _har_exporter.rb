@@ -6,6 +6,15 @@ require 'fileutils'
 
 @type = ["text","application/ogg", "image", "application/octet-stream"]
 
+file_path = ARGV[0]
+if !file_path || !File.exist?(file_path)
+    puts "[error] - ARGV[0] - file_path error or file not exist"
+    exit
+end
+@file_base_path = File.dirname(file_path)
+
+har = JSON.parse(IO.read(file_path))
+
 def check_file_type file_type# {{{
     result = false
     @type.each {|t|
@@ -15,15 +24,6 @@ def check_file_type file_type# {{{
     }
     return result
 end# }}}
-
-file_path = ARGV[0]
-if !file_path || !File.exist?(file_path)
-    puts "[error] - ARGV[0] - file_path error of file not exist"
-    exit
-end
-@file_base_path = File.dirname(file_path)
-
-har = JSON.parse(IO.read(file_path))
 
 i = 1
 har["log"]["entries"].each {|h|
